@@ -13,8 +13,6 @@ print("Matriz de avaliação: \n{}".format(A))
 n,m = A.shape
 assert n==m, "Only works for square matrices"
 
-"Create the identity matrix"
-I = np.identity(A.shape[0])
+"Compute eigenvalues"
 
-"Compute the determinant"
 
