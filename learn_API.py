@@ -8,6 +8,7 @@ Created on Wed Nov 15 06:55:38 2023
 from fastapi import FastAPI
 from pydantic import BaseModel
 import numpy as np
+from keras.models import load_model
 
 
 class input_data(BaseModel):
@@ -23,14 +24,14 @@ app = FastAPI(title="API de Hernandes",                         #Cria uma instâ
                   {"name": "Prediction",
                       "description":"Model Prediction"}])
 
-def load_model():
+def load_the_model():
     #configureMLFLOW
-    return 0
+    pass
 
 @app.on_event(event_type="startup")
-def start_event():
-    global model
-    loaded_model = load_model()
+def startup_event():
+    global loaded_model
+    loaded_model = load_model("iris_model.h5")
 
 
 @app.get(path="/",                                              #@ é um decorator que envelopa a função, path é a rota e a barra significa raiz
@@ -46,7 +47,8 @@ def predict(request: input_data):
     pred_data = np.array([request.feature0,
                           request.feature1,
                           request.feature2,
-                          request.feature3])
+                          request.feature3]).reshape(1,-1)
     prediction = loaded_model.predict(pred_data)
+    print("Prediction is {}.".format(prediction))
     return {"prediction": str(np.argmax(prediction[0]))}
     
